@@ -9,7 +9,8 @@ using System.IO;
 using System.Linq;
 using Microsoft.ML;
 using FlightDelayPredictorFunctionML.Model.DataModels;
-
+using static Microsoft.ML.DataOperationsCatalog;
+using System.Collections.Generic;
 
 namespace FlightDelayPredictorFunctionML.ConsoleApp
 {
@@ -25,40 +26,43 @@ namespace FlightDelayPredictorFunctionML.ConsoleApp
         {
             MLContext mlContext = new MLContext();
 
-            // Training code used by ML.NET CLI and AutoML to generate the model
-            //ModelBuilder.CreateModel();
-
-            ITransformer mlModel = mlContext.Model.Load(GetAbsolutePath(MODEL_FILEPATH), out DataViewSchema inputSchema);
-            var predEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(mlModel);
-
-            // Create sample data to do a single prediction with it 
-            ModelInput sampleData = CreateSingleDataSample(mlContext, DATA_FILEPATH);
-
-            // Try a single prediction
-            ModelOutput predictionResult = predEngine.Predict(sampleData);
-
-            Console.WriteLine($"Single Prediction --> Actual value: {sampleData.DELAYED} | Predicted value: {predictionResult.Prediction}");
-
-            Console.WriteLine("=============== End of process, hit any key to finish ===============");
-            Console.ReadKey();
-        }
-
-        // Method to load single row of data to try a single prediction
-        // You can change this code and create your own sample data here (Hardcoded or from any source)
-        private static ModelInput CreateSingleDataSample(MLContext mlContext, string dataFilePath)
-        {
-            // Read dataset to get a single row for trying a prediction          
             IDataView dataView = mlContext.Data.LoadFromTextFile<ModelInput>(
-                                            path: dataFilePath,
+                                            path: DATA_FILEPATH,
                                             hasHeader: true,
                                             separatorChar: '\t',
                                             allowQuoting: true,
                                             allowSparse: false);
 
-            // Here (ModelInput object) you could provide new test data, hardcoded or from the end-user application, instead of the row from the file.
-            ModelInput sampleForPrediction = mlContext.Data.CreateEnumerable<ModelInput>(dataView, false)
-                                                                        .First();
-            return sampleForPrediction;
+            TrainTestData splitDataView = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
+
+            // Training code used by ML.NET CLI and AutoML to generate the model
+            ModelBuilder.CreateModel(splitDataView.TrainSet, splitDataView.TestSet);
+
+            ITransformer mlModel = mlContext.Model.Load(GetAbsolutePath(MODEL_FILEPATH), out DataViewSchema inputSchema);
+            var predEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(mlModel);
+
+            // Create sample data to do a single prediction with it 
+            IEnumerable<ModelInput> sampleForPrediction = mlContext.Data.CreateEnumerable<ModelInput>(splitDataView.TestSet, false);
+
+            int errorCount = 0;
+
+            Console.WriteLine($"Predicting delayed status for {sampleForPrediction.Count()} flights from test data sample. (Only errors will be printed)");
+
+            foreach (var sampleData in sampleForPrediction)
+            {
+                // Try a single prediction
+                ModelOutput predictionResult = predEngine.Predict(sampleData);
+                if (sampleData.DELAYED != predictionResult.Prediction)
+                {
+                    errorCount++;
+                    Console.WriteLine($"Delay Prediction --> Actual value (will delay): {sampleData.DELAYED} | Predicted value (will delay) : {predictionResult.Prediction}");
+                }
+            }
+
+            Console.WriteLine($"Printed {errorCount} failed predictions out of {sampleForPrediction.Count()} records correctly predicted");
+
+            Console.WriteLine("=============== End of process, hit any key to finish ===============");
+            Console.ReadKey();
         }
 
         public static string GetAbsolutePath(string relativePath)
