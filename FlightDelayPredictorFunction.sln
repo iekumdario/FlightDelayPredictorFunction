@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2050
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightDelayPredictorFunction", "FlightDelayPredictorFunction\FlightDelayPredictorFunction.csproj", "{80732BEB-709D-4877-9607-DDF48983F3D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlightDelayPredictorFunctionML.Model", "FlightDelayPredictorFunctionML.Model\FlightDelayPredictorFunctionML.Model.csproj", "{3E6562E3-DC63-4EA1-9EF9-0F1A066D69A9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlightDelayPredictorFunctionML.ConsoleApp", "FlightDelayPredictorFunctionML.ConsoleApp\FlightDelayPredictorFunctionML.ConsoleApp.csproj", "{7B62B8AC-5F6E-4DFA-B8EA-164AD4C78E0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightDelayPredictor", "FlightDelayPredictor\FlightDelayPredictor.csproj", "{A0619FDD-5927-49C4-B8A1-2D884042E95A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +15,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{80732BEB-709D-4877-9607-DDF48983F3D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{80732BEB-709D-4877-9607-DDF48983F3D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{80732BEB-709D-4877-9607-DDF48983F3D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{80732BEB-709D-4877-9607-DDF48983F3D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E6562E3-DC63-4EA1-9EF9-0F1A066D69A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E6562E3-DC63-4EA1-9EF9-0F1A066D69A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E6562E3-DC63-4EA1-9EF9-0F1A066D69A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E6562E3-DC63-4EA1-9EF9-0F1A066D69A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B62B8AC-5F6E-4DFA-B8EA-164AD4C78E0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B62B8AC-5F6E-4DFA-B8EA-164AD4C78E0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B62B8AC-5F6E-4DFA-B8EA-164AD4C78E0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B62B8AC-5F6E-4DFA-B8EA-164AD4C78E0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0619FDD-5927-49C4-B8A1-2D884042E95A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0619FDD-5927-49C4-B8A1-2D884042E95A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0619FDD-5927-49C4-B8A1-2D884042E95A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0619FDD-5927-49C4-B8A1-2D884042E95A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
